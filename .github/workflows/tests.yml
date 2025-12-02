@@ -1,3 +1,4 @@
+
 name: Run Tests
 
 on:
@@ -7,17 +8,41 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11'
+
       - name: Install dependencies
-        install pytest
+        run: pip install pytest
+
       - name: Run unit tests
-        run: pytest tests/test_unit.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}/calculator_app
+        run: pytest calculator_app/tests/test_unit.py -q
+
+  integration:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pytest
+
       - name: Run integration tests
-        run: pytest tests/test_integration.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}/calculator_app
+        run: pytest calculator_app/tests/test_integration.py -q
