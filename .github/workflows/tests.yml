@@ -23,9 +23,7 @@ jobs:
         run: pip install pytest
 
       - name: Run unit tests
-        env:
-          PYTHONPATH: ${{ github.workspace }}/calculator_app
-        run: pytest calculator_app/tests/test_unit.py -q
+        run: pytest tests/test_unit.py -q
 
   integration:
     if: github.event_name == 'push'
@@ -43,6 +41,4 @@ jobs:
         run: pip install pytest
 
       - name: Run integration tests
-        env:
-          PYTHONPATH: ${{ github.workspace }}/calculator_app
-        run: pytest calculator_app/tests/test_integration.py -q
+        run: pytest tests/test_integration.py -q
