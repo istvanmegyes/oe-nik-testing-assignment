@@ -1,0 +1,23 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        install pytest
+      - name: Run unit tests
+        run: pytest tests/test_unit.py
+      - name: Run integration tests
+        run: pytest tests/test_integration.py
